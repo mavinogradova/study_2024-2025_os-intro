@@ -87,37 +87,37 @@ header-includes:
 
 Запускаем виртуальную машину server и подключаемся к ней по SSH (рис. [-@fig:001]).
 
-![Запуск виртуальной машины server](/home/mavinogradova/skreens/lbA3/40.png){#fig:001 width=70%}
+![Запуск виртуальной машины server](/home/mavinogradova/skreens/lab3/1.png){#fig:001 width=70%}
 
 На виртуальной машине server входим под созданным ранее пользователем `mavinogradova` и переходим в режим суперпользователя (рис. [-@fig:002]).
 
-![Вход под mavinogradova и получение root](/home/mavinogradova/skreens/lbA3/41.png){#fig:002 width=70%}
+![Вход под mavinogradova и получение root](/home/mavinogradova/skreens/lab3/2.png){#fig:002 width=70%}
 
 ### Установка DHCP-сервера
 
 Устанавливаем DHCP-сервер Kea (рис. [-@fig:003]).
 
-![Установка kea](/home/mavinogradova/skreens/lbA3/42.png){#fig:003 width=70%}
+![Установка kea](/home/mavinogradova/skreens/lab3/3.png){#fig:003 width=70%}
 
 ### Конфигурирование DHCP-сервера
 
 Сохраняем на всякий случай конфигурационный файл и открываем его на редактирование (рис. [-@fig:004]).
 
-![Резервная копия kea-dhcp4.conf](/home/mavinogradova/skreens/lbA3/1.png){#fig:004 width=70%}
+![Резервная копия kea-dhcp4.conf](/home/mavinogradova/skreens/lab3/4.png){#fig:004 width=70%}
 
 Анализируем содержимое файла `/etc/kea/kea-dhcp4.conf` (рис. [-@fig:005]).
 
-![Содержимое kea-dhcp4.conf](/home/mavinogradova/skreens/lbA3/2.png){#fig:005 width=70%}
+![Содержимое kea-dhcp4.conf](/home/mavinogradova/skreens/lab3/5.png){#fig:005 width=70%}
 
 В файле `/etc/kea/kea-dhcp4.conf` заменяем шаблон для `domain-name` и `domain-search` на `mavinogradova.net`, блок `domain-name-servers` — на адрес `192.168.1.1`, а также задаём собственную конфигурацию DHCP-сети: адрес подсети `192.168.1.0/24`, диапазон адресов для распределения клиентам `192.168.1.30 – 192.168.1.199`, адрес маршрутизатора `192.168.1.1`. Остальные примеры задания конфигураций подсетей удаляем. Настраиваем привязку dhcpd к интерфейсу `eth1` виртуальной машины server.
 
 Проверяем правильность конфигурационного файла (рис. [-@fig:006]).
 
-![Проверка конфигурационного файла](/home/mavinogradova/skreens/lbA3/3.png){#fig:006 width=70%}
+![Проверка конфигурационного файла](/home/mavinogradova/skreens/lab3/6.png){#fig:006 width=70%}
 
 Перезагружаем конфигурацию dhcpd и разрешаем загрузку DHCP-сервера при запуске виртуальной машины server (рис. [-@fig:007]).
 
-![Перезагрузка конфигурации и включение автозапуска](/home/mavinogradova/skreens/lbA3/4.png){#fig:007 width=70%}
+![Перезагрузка конфигурации и включение автозапуска](/home/mavinogradova/skreens/lab3/7.png){#fig:007 width=70%}
 
 Добавляем запись для DHCP-сервера в конце файла прямой DNS-зоны `/var/named/master/fz/mavinogradova.net`: dhcp    A    192.168.1.1 и в конце файла обратной зоны `/var/named/master/rz/192.168.1`: 1    PTR    dhcp.mavinogradova.net.
 
@@ -125,62 +125,62 @@ header-includes:
 
 Прямая зона после правки (рис. [-@fig:008]).
 
-![Прямая DNS-зона mavinogradova.net](/home/mavinogradova/skreens/lbA3/5.png){#fig:008 width=70%}
+![Прямая DNS-зона mavinogradova.net](/home/mavinogradova/skreens/lab3/8.png){#fig:008 width=70%}
 
 Обратная зона после правки (рис. [-@fig:009]).
 
-![Обратная DNS-зона 192.168.1](/home/mavinogradova/skreens/lbA3/6.png){#fig:009 width=70%}
+![Обратная DNS-зона 192.168.1](/home/mavinogradova/skreens/lab3/9.png){#fig:009 width=70%}
 
 Перезапускаем named и проверяем, что можно обратиться к DHCP-серверу по имени (рис. [-@fig:010]).
 
 
-![Перезапуск named и проверка ping dhcp.mavinogradova.net](/home/mavinogradova/skreens/lbA3/7.png){#fig:010 width=70%}
+![Перезапуск named и проверка ping dhcp.mavinogradova.net](/home/mavinogradova/skreens/lab3/10.png){#fig:010 width=70%}
 
 Вносим изменения в настройки межсетевого экрана узла server, разрешив работу с DHCP (рис. [-@fig:011]).
 
-![Разрешение DHCP в firewall](/home/mavinogradova/skreens/lbA3/8.png){#fig:011 width=70%}
+![Разрешение DHCP в firewall](/home/mavinogradova/skreens/lab3/11.png){#fig:011 width=70%}
 
 Восстанавливаем контекст безопасности в SELinux (рис. [-@fig:012]).
 
-![Восстановление контекста SELinux](/home/mavinogradova/skreens/lbA3/9.png){#fig:012 width=70%}
+![Восстановление контекста SELinux](/home/mavinogradova/skreens/lab3/12.png){#fig:012 width=70%}
 
 В дополнительном терминале запускаем мониторинг происходящих в системе процессов в реальном времени (рис. [-@fig:013]).
 
-![Мониторинг системных сообщений](/home/mavinogradova/skreens/lbA3/10.png){#fig:013 width=70%}
+![Мониторинг системных сообщений](/home/mavinogradova/skreens/lab3/13.png){#fig:013 width=70%}
 
 В основном рабочем терминале запускаем DHCP-сервер (рис. [-@fig:014]).
 
-![Запуск DHCP-сервера](/home/mavinogradova/skreens/lbA3/11.png){#fig:014 width=70%}
+![Запуск DHCP-сервера](/home/mavinogradova/skreens/lab3/14.png){#fig:014 width=70%}
 
 Убеждаемся, что запуск DHCP-сервера прошёл успешно (рис. [-@fig:015]).
 
-![Запуск kea-dhcp4.service](/home/mavinogradova/skreens/lbA3/12.png){#fig:015 width=70%}
+![Запуск kea-dhcp4.service](/home/mavinogradova/skreens/lab3/15.png){#fig:015 width=70%}
 
 ### Анализ работы DHCP-сервера
 
 Перед запуском виртуальной машины client в каталоге с проектом в подкаталоге `vagrant/provision/client` создаём файл `01-routing.sh` (рис. [-@fig:016]).
 
-![Создание файла 01-routing.sh](/home/mavinogradova/skreens/lbA3/13.png){#fig:016 width=70%}
+![Создание файла 01-routing.sh](/home/mavinogradova/skreens/lab3/16.png){#fig:016 width=70%}
 
 Открыв его на редактирование, прописываем в нём скрипт, изменяющий настройки NetworkManager так, чтобы весь трафик на виртуальной машине client шёл по умолчанию через интерфейс `eth1` (рис. [-@fig:017]).
 
-![Содержимое 01-routing.sh](/home/mavinogradova/skreens/lbA3/14.png){#fig:017 width=70%}
+![Содержимое 01-routing.sh](/home/mavinogradova/skreens/lab3/17.png){#fig:017 width=70%}
 
 В `Vagrantfile` подключаем этот скрипт в разделе конфигурации для клиента (рис. [-@fig:018]).
 
-![Фрагмент Vagrantfile с client routing](/home/mavinogradova/skreens/lbA3/15.png){#fig:018 width=70%}
+![Фрагмент Vagrantfile с client routing](/home/mavinogradova/skreens/lab3/18.png){#fig:018 width=70%}
 
 Зафиксировав внесённые изменения для внутренних настроек виртуальной машины client, запускаем её (рис. [-@fig:019]).
 
-![Запуск клиента с провижинингом](/home/mavinogradova/skreens/lbA3/16.png){#fig:019 width=70%}
+![Запуск клиента с провижинингом](/home/mavinogradova/skreens/lab3/19.png){#fig:019 width=70%}
 
 После загрузки виртуальной машины client на виртуальной машине server в терминале с мониторингом происходящих в системе процессов можно наблюдать записи о подключении к виртуальной внутренней сети узла client и выдачи ему IP-адреса из соответствующего диапазона адресов (рис. [-@fig:020]).
 
-![Логи DHCP-сервера](/home/mavinogradova/skreens/lbA3/17.png){#fig:020 width=70%}
+![Логи DHCP-сервера](/home/mavinogradova/skreens/lab3/20.png){#fig:020 width=70%}
 
 Также информацию о работе DHCP-сервера можно наблюдать в файле `/var/lib/kea/kea-leases4.csv` (рис. [-@fig:021]).
 
-![Содержимое kea-leases4.csv](/home/mavinogradova/skreens/lbA3/18.png){#fig:021 width=70%}
+![Содержимое kea-leases4.csv](/home/mavinogradova/skreens/lab3/21.png){#fig:021 width=70%}
 
 В таблице [-@tab:leases] приведён построчный комментарий информации из файла `/var/lib/kea/kea-leases4.csv`.
 
@@ -203,7 +203,7 @@ header-includes:
 
 Войдя в систему виртуальной машины client под пользователем `mavinogradova` и открыв терминал, вводим `ifconfig` (рис. [-@fig:022]).
 
-![Вывод ifconfig на клиенте](/home/mavinogradova/skreens/lbA3/19.png){#fig:022 width=70%}
+![Вывод ifconfig на клиенте](/home/mavinogradova/skreens/lab3/22.png){#fig:022 width=70%}
 
 В таблице [-@tab:ifconfig] приведён построчный комментарий информации об имеющихся интерфейсах.
 
@@ -231,71 +231,71 @@ header-includes:
 
 На машине server ещё раз смотрим список выданных адресов (рис. [-@fig:023]).
 
-![Повторный просмотр kea-leases4.csv](/home/mavinogradova/skreens/lbA3/18.png){#fig:023 width=70%}
+![Повторный просмотр kea-leases4.csv](/home/mavinogradova/skreens/lab3/21.png){#fig:023 width=70%}
 
 ### Настройка обновления DNS-зоны
 
 Создаём ключ на сервере с Bind9 (на виртуальной машине server) (рис. [-@fig:024]).
 
-![Генерация TSIG-ключа](/home/mavinogradova/skreens/lbA3/20.png){#fig:024 width=70%}
+![Генерация TSIG-ключа](/home/mavinogradova/skreens/lab3/23.png){#fig:024 width=70%}
 
 Поправляем права доступа (рис. [-@fig:025]).
 
-![Права доступа на ключ](/home/mavinogradova/skreens/lbA3/26.png){#fig:025 width=70%}
+![Права доступа на ключ](/home/mavinogradova/skreens/lab3/24.png){#fig:025 width=70%}
 
 Подключаем ключ в файле `/etc/named.conf` (рис. [-@fig:026]).
 
-![Подключение ключа в named.conf](/home/mavinogradova/skreens/lbA3/21.png){#fig:026 width=70%}
+![Подключение ключа в named.conf](/home/mavinogradova/skreens/lab3/25.png){#fig:026 width=70%}
 
 На виртуальной машине server под пользователем с правами суперпользователя редактируем файл `/etc/named/mavinogradova.net`, разрешив обновление зоны (рис. [-@fig:027]).
 
-![Разрешение обновления зон](/home/mavinogradova/skreens/lbA3/22.png){#fig:027 width=70%}
+![Разрешение обновления зон](/home/mavinogradova/skreens/lab3/26.png){#fig:027 width=70%}
 
 Сделаем проверку конфигурационного файла и перезапустим DNS-сервер (рис. [-@fig:028]).
 
-![Проверка named.conf и перезапуск named](/home/mavinogradova/skreens/lbA3/23.png){#fig:028 width=70%}
+![Проверка named.conf и перезапуск named](/home/mavinogradova/skreens/lab3/27.png){#fig:028 width=70%}
 
 Формируем ключ для Kea. Файл ключа назовём `/etc/kea/tsig-keys.json` (рис. [-@fig:029]).
 
-![Создание tsig-keys.json](/home/mavinogradova/skreens/lbA3/24.png){#fig:029 width=70%}
+![Создание tsig-keys.json](/home/mavinogradova/skreens/lab3/28.png){#fig:029 width=70%}
 
 Переносим ключ с сервера Kea DHCP и переписываем его в формате JSON (рис. [-@fig:030]).
 
-![Содержимое tsig-keys.json](/home/mavinogradova/skreens/lbA3/25.png){#fig:030 width=70%}
+![Содержимое tsig-keys.json](/home/mavinogradova/skreens/lab3/29.png){#fig:030 width=70%}
 
 Сменим владельца и поправим права доступа (рис. [-@fig:031]).
 
-![Права на tsig-keys.json](/home/mavinogradova/skreens/lbA3/26.png){#fig:031 width=70%}
+![Права на tsig-keys.json](/home/mavinogradova/skreens/lab3/30.png){#fig:031 width=70%}
 
 Настройка происходит в файле `/etc/kea/kea-dhcp-ddns.conf` (рис. [-@fig:032]).
 
-![Настройка kea-dhcp-ddns.conf](/home/mavinogradova/skreens/lbA3/27.png){#fig:032 width=70%}
+![Настройка kea-dhcp-ddns.conf](/home/mavinogradova/skreens/lab3/31.png){#fig:032 width=70%}
 
 Проверяем файл на наличие возможных синтаксических ошибок, запускаем службу ddns и проверяем статус работы службы (рис. [-@fig:033]).
 
-![Проверка и запуск kea-dhcp-ddns](/home/mavinogradova/skreens/lbA3/28.png){#fig:033 width=70%}
+![Проверка и запуск kea-dhcp-ddns](/home/mavinogradova/skreens/lab3/32.png){#fig:033 width=70%}
 
 Вносим изменения в конфигурационный файл `/etc/kea/kea-dhcp4.conf`, добавив в него разрешение на динамическое обновление DNS-записей с локального узла прямой и обратной зон (рис. [-@fig:034]).
 
-![Правка kea-dhcp4.conf (enable-updates)](/home/mavinogradova/skreens/lbA3/29.png){#fig:034 width=70%}
+![Правка kea-dhcp4.conf (enable-updates)](/home/mavinogradova/skreens/lab3/33.png){#fig:034 width=70%}
 
 Проверяем файл на наличие возможных синтаксических ошибок, перезапускаем DHCP-сервер и проверяем статус (рис. [-@fig:035]).
 
-![Проверка и перезапуск kea-dhcp4](/home/mavinogradova/skreens/lbA3/30.png){#fig:035 width=70%}
+![Проверка и перезапуск kea-dhcp4](/home/mavinogradova/skreens/lab3/34.png){#fig:035 width=70%}
 
 На машине client переполучаем адрес (рис. [-@fig:036]).
 
-![Переполучение адреса на клиенте](/home/mavinogradova/skreens/lbA3/32.png){#fig:036 width=70%}
+![Переполучение адреса на клиенте](/home/mavinogradova/skreens/lab3/35.png){#fig:036 width=70%}
 
 В каталоге прямой DNS-зоны `/var/named/master/fz` должен появиться файл `mavinogradova.net.jnl`, в котором в бинарном файле автоматически вносятся изменения записей зоны (рис. [-@fig:037]).
 
-![Появление mavinogradova.net.jnl](/home/mavinogradova/skreens/lbA3/33.png){#fig:037 width=70%}
+![Появление mavinogradova.net.jnl](/home/mavinogradova/skreens/lab3/36.png){#fig:037 width=70%}
 
 ### Анализ работы DHCP-сервера после настройки обновления DNS-зоны
 
 На виртуальной машине client под пользователем `mavinogradova` открываем терминал и с помощью утилиты dig убеждаемся в наличии DNS-записи о клиенте в прямой DNS-зоне (рис. [-@fig:038]).
 
-![Проверка DNS-записи клиента через dig](/home/mavinogradova/skreens/lbA3/34.png){#fig:038 width=70%}
+![Проверка DNS-записи клиента через dig](/home/mavinogradova/skreens/lab3/37.png){#fig:038 width=70%}
 
 В таблице [-@tab:dig] приведён построчный комментарий выведенной информации.
 
@@ -317,28 +317,28 @@ header-includes:
 
 На виртуальной машине server переходим в каталог для внесения изменений в настройки внутреннего окружения `/vagrant/provision/server/`, создаём в нём каталог `dhcp`, в который помещаем в соответствующие подкаталоги конфигурационные файлы DHCP (рис. [-@fig:039]).
 
-![Копирование конфигурационных файлов DHCP](/home/mavinogradova/skreens/lbA3/35.png){#fig:039 width=70%}
+![Копирование конфигурационных файлов DHCP](/home/mavinogradova/skreens/lab3/38.png){#fig:039 width=70%}
 
 Заменяем конфигурационные файлы DNS-сервера (рис. [-@fig:040]).
 
-![Копирование конфигурационных файлов DNS](/home/mavinogradova/skreens/lbA3/36.png){#fig:040 width=70%}
+![Копирование конфигурационных файлов DNS](/home/mavinogradova/skreens/lab3/39.png){#fig:040 width=70%}
 
 В каталоге `/vagrant/provision/server` создаём исполняемый файл `dhcp.sh` (рис. [-@fig:041]).
 
-![Создание dhcp.sh](/home/mavinogradova/skreens/lbA3/37.png){#fig:041 width=70%}
+![Создание dhcp.sh](/home/mavinogradova/skreens/lab3/40.png){#fig:041 width=70%}
 
 Открыв его на редактирование, прописываем в нём скрипт, повторяющий произведённые действия по установке и настройке DHCP-сервера (рис. [-@fig:042]).
 
-![Содержимое dhcp.sh](/home/mavinogradova/skreens/lbA3/38.png){#fig:042 width=70%}
+![Содержимое dhcp.sh](/home/mavinogradova/skreens/lab3/41.png){#fig:042 width=70%}
 
 Для отработки созданного скрипта во время загрузки виртуальной машины server в конфигурационном файле `Vagrantfile` необходимо добавить в разделе конфигурации для сервера:
 Фрагмент `Vagrantfile` с добавленной строкой (рис. [-@fig:043]).
 
-![Фрагмент Vagrantfile с server dhcp](/home/mavinogradova/skreens/lbA3/39.png){#fig:043 width=70%}
+![Фрагмент Vagrantfile с server dhcp](/home/mavinogradova/skreens/lab3/42.png){#fig:043 width=70%}
 
 После этого виртуальные машины client и server можно выключить (рис. [-@fig:044]).
 
-![Выключение виртуальных машин](/home/mavinogradova/skreens/lbA3/43.png){#fig:044 width=70%}
+![Выключение виртуальных машин](/home/mavinogradova/skreens/lab3/43.png){#fig:044 width=70%}
 
 ## Выводы
 
