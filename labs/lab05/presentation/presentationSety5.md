@@ -158,7 +158,7 @@ header-includes:
 :::::::::::::: {.columns align=center}
 ::: {.column width="70%"}
 
-![Настройка PC1](/home/mavinogradova/skreens/SetyLb5/11.png){#fig:011 width=70%}
+![Настройка PC1](/home/mavinogradova/skreens/SetyLb5/11.png){#fig:011 width=50%}
 
 :::
 ::::::::::::::
@@ -303,7 +303,7 @@ header-includes:
 :::::::::::::: {.columns align=center}
 ::: {.column width="70%"}
 
-![Настройка stateful DHCPv6](/home/mavinogradova/skreens/SetyLb5/26.png){#fig:026 width=70%}
+![Настройка stateful DHCPv6](/home/mavinogradova/skreens/SetyLb5/26.png){#fig:026 width=65%}
 
 :::
 ::::::::::::::
