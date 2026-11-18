@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Виноградова М.А">
+  <title>Отчет по лабораторной работе №6</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reset.css">
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/reveal.css">
+  <style>
+    .reveal .sourceCode {  /* see #7635 */
+      overflow: visible;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/reveal.js@^4//dist/theme/beige.css" id="theme">
+  
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Отчет по лабораторной работе №6</h1>
+  <p class="subtitle">Адресация IPv4 и IPv6. Настройка маршрутизации по
+протоколу RIP</p>
+  <p class="author">Виноградова М.А</p>
+  <p class="institute">Российский университет дружбы народов, Москва,
+Россия</p>
+  <p class="date">17 ноября 2026</p>
+</section>
+
+<section id="информация" class="slide level1">
+<h1>Информация</h1>
+<h2 id="докладчик">Докладчик</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<ul>
+<li>Виноградова Мария Андреевна</li>
+<li>студентка НПИбд-02-24</li>
+<li>номер студ. билета 1132240691</li>
+<li>Российский университет дружбы народов</li>
+<li><a href="mailto:1132240691@rudn.ru">1132240691@rudn.ru</a></li>
+<li><a href="https://github.com/mavinogradova/study_2026-2027"
+class="uri">https://github.com/mavinogradova/study_2026-2027</a></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="цель-работы" class="slide level1">
+<h1>Цель работы</h1>
+<p>Изучение принципов маршрутизации по протоколу RIP в IPv4- и
+IPv6-сетях и принципов настройки сетевого оборудования.</p>
+</section>
+<section id="задание" class="slide level1">
+<h1>Задание</h1>
+<ol type="1">
+<li>Настройте динамическую маршрутизацию по протоколу RIP в сетях IPv4 и
+IPv6 (см. раздел 6.3.1).</li>
+<li>Выполните задание для самостоятельного выполнения (см. раздел
+6.3.2).</li>
+</ol>
+</section>
+<section id="выполнение-лабораторной-работы" class="slide level1">
+<h1>Выполнение лабораторной работы</h1>
+<h2 id="создание-проекта">Создание проекта</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:001">
+<img data-src="/home/mavinogradova/skreens/lbA6/1.png"
+style="width:70.0%" alt="Создание нового проекта" />
+<figcaption aria-hidden="true">Создание нового проекта</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="сборка-топологии-сети">Сборка топологии сети</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:002">
+<img data-src="/home/mavinogradova/skreens/lbA6/2.png"
+style="width:70.0%" alt="Топология сети в GNS3" />
+<figcaption aria-hidden="true">Топология сети в GNS3</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="схемы-l1-и-l3">Схемы L1 и L3</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:003">
+<img data-src="/home/mavinogradova/skreens/lbA6/3.png"
+style="width:100.0%" alt="Схема L1" />
+<figcaption aria-hidden="true">Схема L1</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:004">
+<img data-src="/home/mavinogradova/skreens/lbA6/4.png"
+style="width:100.0%" alt="Схема L3" />
+<figcaption aria-hidden="true">Схема L3</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ipv4-на-pc1-и-pc2">Настройка IPv4 на PC1 и PC2</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:005">
+<img data-src="/home/mavinogradova/skreens/lbA6/5.png"
+style="width:70.0%" alt="Настройка IPv4 на PC1 и PC2" />
+<figcaption aria-hidden="true">Настройка IPv4 на PC1 и PC2</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ipv4-на-gw-01-и-gw-02">Настройка IPv4 на gw-01 и
+gw-02</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:006">
+<img data-src="/home/mavinogradova/skreens/lbA6/6.png"
+style="width:100.0%" alt="Настройка IPv4 на gw-01" />
+<figcaption aria-hidden="true">Настройка IPv4 на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:007">
+<img data-src="/home/mavinogradova/skreens/lbA6/7.png"
+style="width:100.0%" alt="Настройка IPv4 на gw-02" />
+<figcaption aria-hidden="true">Настройка IPv4 на gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ipv4-на-gw-03-и-gw-04">Настройка IPv4 на gw-03 и
+gw-04</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:008">
+<img data-src="/home/mavinogradova/skreens/lbA6/8.png"
+style="width:100.0%" alt="Настройка IPv4 на gw-03" />
+<figcaption aria-hidden="true">Настройка IPv4 на gw-03</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:009">
+<img data-src="/home/mavinogradova/skreens/lbA6/9.png"
+style="width:100.0%" alt="Настройка IPv4 на gw-04" />
+<figcaption aria-hidden="true">Настройка IPv4 на gw-04</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ipv6-на-pc1-и-pc2">Настройка IPv6 на PC1 и PC2</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:010">
+<img data-src="/home/mavinogradova/skreens/lbA6/10.png"
+style="width:100.0%" alt="Настройка IPv6 на PC1" />
+<figcaption aria-hidden="true">Настройка IPv6 на PC1</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:011">
+<img data-src="/home/mavinogradova/skreens/lbA6/11.png"
+style="width:100.0%" alt="Настройка IPv6 на PC2" />
+<figcaption aria-hidden="true">Настройка IPv6 на PC2</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ipv6-на-gw-01-и-gw-02">Настройка IPv6 на gw-01 и
+gw-02</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:012">
+<img data-src="/home/mavinogradova/skreens/lbA6/12.png"
+style="width:100.0%" alt="Настройка IPv6 на gw-01" />
+<figcaption aria-hidden="true">Настройка IPv6 на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:013">
+<img data-src="/home/mavinogradova/skreens/lbA6/13.png"
+style="width:100.0%" alt="Настройка IPv6 на gw-02" />
+<figcaption aria-hidden="true">Настройка IPv6 на gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ipv6-на-gw-03-и-gw-04">Настройка IPv6 на gw-03 и
+gw-04</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:014">
+<img data-src="/home/mavinogradova/skreens/lbA6/14.png"
+style="width:100.0%" alt="Настройка IPv6 на gw-03" />
+<figcaption aria-hidden="true">Настройка IPv6 на gw-03</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:015">
+<img data-src="/home/mavinogradova/skreens/lbA6/15.png"
+style="width:100.0%" alt="Настройка IPv6 на gw-04" />
+<figcaption aria-hidden="true">Настройка IPv6 на gw-04</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ripv2-на-gw-01-и-gw-02">Настройка RIPv2 на gw-01 и
+gw-02</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:016">
+<img data-src="/home/mavinogradova/skreens/lbA6/16.png"
+style="width:100.0%" alt="Настройка RIPv2 на gw-01" />
+<figcaption aria-hidden="true">Настройка RIPv2 на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:017">
+<img data-src="/home/mavinogradova/skreens/lbA6/17.png"
+style="width:100.0%" alt="Настройка RIPv2 на gw-02" />
+<figcaption aria-hidden="true">Настройка RIPv2 на gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ripv2-на-gw-03-и-gw-04">Настройка RIPv2 на gw-03 и
+gw-04</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:018">
+<img data-src="/home/mavinogradova/skreens/lbA6/18.png"
+style="width:100.0%" alt="Настройка RIPv2 на gw-03" />
+<figcaption aria-hidden="true">Настройка RIPv2 на gw-03</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:019">
+<img data-src="/home/mavinogradova/skreens/lbA6/19.png"
+style="width:100.0%" alt="Настройка RIPv2 на gw-04" />
+<figcaption aria-hidden="true">Настройка RIPv2 на gw-04</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="проверка-ripv2-на-gw-01-и-gw-02">Проверка RIPv2 на gw-01 и
+gw-02</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:020">
+<img data-src="/home/mavinogradova/skreens/lbA6/20.png"
+style="width:100.0%" alt="Проверка RIPv2 на gw-01" />
+<figcaption aria-hidden="true">Проверка RIPv2 на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:021">
+<img data-src="/home/mavinogradova/skreens/lbA6/21.png"
+style="width:100.0%" alt="Проверка RIPv2 на gw-02" />
+<figcaption aria-hidden="true">Проверка RIPv2 на gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="проверка-ripv2-на-gw-03-и-gw-04">Проверка RIPv2 на gw-03 и
+gw-04</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:022">
+<img data-src="/home/mavinogradova/skreens/lbA6/22.png"
+style="width:100.0%" alt="Проверка RIPv2 на gw-03" />
+<figcaption aria-hidden="true">Проверка RIPv2 на gw-03</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:023">
+<img data-src="/home/mavinogradova/skreens/lbA6/23.png"
+style="width:100.0%" alt="Проверка RIPv2 на gw-04" />
+<figcaption aria-hidden="true">Проверка RIPv2 на gw-04</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="проверка-связи-с-pc1-ipv4-и-метрики-rip">Проверка связи с PC1
+(IPv4) и метрики RIP</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:024">
+<img data-src="/home/mavinogradova/skreens/lbA6/24.png"
+style="width:100.0%" alt="Проверка связи с PC1 до PC2 по IPv4" />
+<figcaption aria-hidden="true">Проверка связи с PC1 до PC2 по
+IPv4</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:025">
+<img data-src="/home/mavinogradova/skreens/lbA6/25.png"
+style="width:100.0%" alt="Метрики RIPv2 на gw-01" />
+<figcaption aria-hidden="true">Метрики RIPv2 на gw-01</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="отключение-eth0-на-gw-02-и-проверка-изменений">Отключение eth0
+на gw-02 и проверка изменений</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:026">
+<img data-src="/home/mavinogradova/skreens/lbA6/26.png"
+style="width:100.0%" alt="Отключение интерфейса eth0 на gw-02" />
+<figcaption aria-hidden="true">Отключение интерфейса eth0 на
+gw-02</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:027">
+<img data-src="/home/mavinogradova/skreens/lbA6/27.png"
+style="width:100.0%"
+alt="Изменение маршрутов RIPv2 на gw-01 после отказа" />
+<figcaption aria-hidden="true">Изменение маршрутов RIPv2 на gw-01 после
+отказа</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="проверка-связи-после-отказа-и-включение-интерфейса">Проверка
+связи после отказа и включение интерфейса</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:028">
+<img data-src="/home/mavinogradova/skreens/lbA6/28.png"
+style="width:100.0%" alt="Проверка связи после отказа канала" />
+<figcaption aria-hidden="true">Проверка связи после отказа
+канала</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:029">
+<img data-src="/home/mavinogradova/skreens/lbA6/29.png"
+style="width:100.0%" alt="Включение интерфейса eth0 на gw-02" />
+<figcaption aria-hidden="true">Включение интерфейса eth0 на
+gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="восстановление-короткого-пути-ipv4">Восстановление короткого
+пути (IPv4)</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:030">
+<img data-src="/home/mavinogradova/skreens/lbA6/30.png"
+style="width:70.0%" alt="Восстановление короткого пути" />
+<figcaption aria-hidden="true">Восстановление короткого
+пути</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="захват-трафика-ripv2">Захват трафика RIPv2</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:031">
+<img data-src="/home/mavinogradova/skreens/lbA6/31.png"
+style="width:100.0%" alt="Захват RIPv2 на gw-01" />
+<figcaption aria-hidden="true">Захват RIPv2 на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:032">
+<img data-src="/home/mavinogradova/skreens/lbA6/32.png"
+style="width:100.0%" alt="Захват RIPv2 на gw-03" />
+<figcaption aria-hidden="true">Захват RIPv2 на gw-03</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ripng-на-gw-01-и-gw-02">Настройка RIPng на gw-01 и
+gw-02</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:033">
+<img data-src="/home/mavinogradova/skreens/lbA6/33.png"
+style="width:100.0%" alt="Настройка RIPng на gw-01" />
+<figcaption aria-hidden="true">Настройка RIPng на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:034">
+<img data-src="/home/mavinogradova/skreens/lbA6/34.png"
+style="width:100.0%" alt="Настройка RIPng на gw-02" />
+<figcaption aria-hidden="true">Настройка RIPng на gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="настройка-ripng-на-gw-03-и-gw-04">Настройка RIPng на gw-03 и
+gw-04</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:035">
+<img data-src="/home/mavinogradova/skreens/lbA6/35.png"
+style="width:100.0%" alt="Настройка RIPng на gw-03" />
+<figcaption aria-hidden="true">Настройка RIPng на gw-03</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:036">
+<img data-src="/home/mavinogradova/skreens/lbA6/36.png"
+style="width:100.0%" alt="Настройка RIPng на gw-04" />
+<figcaption aria-hidden="true">Настройка RIPng на gw-04</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="проверка-связи-с-pc1-ipv6-и-метрики-ripng">Проверка связи с PC1
+(IPv6) и метрики RIPng</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:037">
+<img data-src="/home/mavinogradova/skreens/lbA6/37.png"
+style="width:100.0%" alt="Проверка связи с PC1 до PC2 по IPv6" />
+<figcaption aria-hidden="true">Проверка связи с PC1 до PC2 по
+IPv6</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:038">
+<img data-src="/home/mavinogradova/skreens/lbA6/38.png"
+style="width:100.0%" alt="Метрики RIPng на gw-01" />
+<figcaption aria-hidden="true">Метрики RIPng на gw-01</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="отключение-eth0-на-gw-02-и-проверка-ripng">Отключение eth0 на
+gw-02 и проверка RIPng</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:039">
+<img data-src="/home/mavinogradova/skreens/lbA6/39.png"
+style="width:100.0%" alt="Отключение интерфейса eth0 на gw-02" />
+<figcaption aria-hidden="true">Отключение интерфейса eth0 на
+gw-02</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:040">
+<img data-src="/home/mavinogradova/skreens/lbA6/40.png"
+style="width:100.0%"
+alt="Изменение маршрутов RIPng на gw-01 после отказа" />
+<figcaption aria-hidden="true">Изменение маршрутов RIPng на gw-01 после
+отказа</figcaption>
+</figure>
+</div>
+</div>
+<h2
+id="проверка-связи-после-отказа-и-включение-интерфейса-ipv6">Проверка
+связи после отказа и включение интерфейса (IPv6)</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:041">
+<img data-src="/home/mavinogradova/skreens/lbA6/41.png"
+style="width:100.0%" alt="Проверка связи после отказа канала по IPv6" />
+<figcaption aria-hidden="true">Проверка связи после отказа канала по
+IPv6</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:042">
+<img data-src="/home/mavinogradova/skreens/lbA6/42.png"
+style="width:100.0%" alt="Включение интерфейса eth0 на gw-02" />
+<figcaption aria-hidden="true">Включение интерфейса eth0 на
+gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="восстановление-короткого-пути-ipv6">Восстановление короткого
+пути (IPv6)</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:043">
+<img data-src="/home/mavinogradova/skreens/lbA6/43.png"
+style="width:70.0%" alt="Восстановление короткого пути по IPv6" />
+<figcaption aria-hidden="true">Восстановление короткого пути по
+IPv6</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="захват-трафика-ripng">Захват трафика RIPng</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:044">
+<img data-src="/home/mavinogradova/skreens/lbA6/44.png"
+style="width:100.0%" alt="Захват RIPng на gw-01" />
+<figcaption aria-hidden="true">Захват RIPng на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:045">
+<img data-src="/home/mavinogradova/skreens/lbA6/45.png"
+style="width:100.0%" alt="Захват RIPng на gw-03" />
+<figcaption aria-hidden="true">Захват RIPng на gw-03</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="самостоятельное-задание-создание-проекта">Самостоятельное
+задание: создание проекта</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:046">
+<img data-src="/home/mavinogradova/skreens/lbA6/46.png"
+style="width:70.0%"
+alt="Создание нового проекта для самостоятельного задания" />
+<figcaption aria-hidden="true">Создание нового проекта для
+самостоятельного задания</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="самостоятельное-задание-сборка-топологии">Самостоятельное
+задание: сборка топологии</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:047">
+<img data-src="/home/mavinogradova/skreens/lbA6/47.png"
+style="width:70.0%" alt="Топология сети для самостоятельного задания" />
+<figcaption aria-hidden="true">Топология сети для самостоятельного
+задания</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="самостоятельное-задание-схемы-l1-и-l3">Самостоятельное задание:
+схемы L1 и L3</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:048">
+<img data-src="/home/mavinogradova/skreens/lbA6/48.png"
+style="width:100.0%" alt="Схема L1 для самостоятельного задания" />
+<figcaption aria-hidden="true">Схема L1 для самостоятельного
+задания</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:049">
+<img data-src="/home/mavinogradova/skreens/lbA6/49.png"
+style="width:100.0%" alt="Схема L3 для самостоятельного задания" />
+<figcaption aria-hidden="true">Схема L3 для самостоятельного
+задания</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="самостоятельное-задание-настройка-pc1-и-pc2">Самостоятельное
+задание: настройка PC1 и PC2</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:70%;">
+<figure id="fig:050">
+<img data-src="/home/mavinogradova/skreens/lbA6/50.png"
+style="width:70.0%" alt="Настройка PC1 и PC2" />
+<figcaption aria-hidden="true">Настройка PC1 и PC2</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="самостоятельное-задание-настройка-gw-01-и-gw-02">Самостоятельное
+задание: настройка gw-01 и gw-02</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:051">
+<img data-src="/home/mavinogradova/skreens/lbA6/51.png"
+style="width:100.0%" alt="Настройка gw-01" />
+<figcaption aria-hidden="true">Настройка gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:052">
+<img data-src="/home/mavinogradova/skreens/lbA6/52.png"
+style="width:100.0%" alt="Настройка gw-02" />
+<figcaption aria-hidden="true">Настройка gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2 id="самостоятельное-задание-настройка-gw-03-и-gw-04">Самостоятельное
+задание: настройка gw-03 и gw-04</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:053">
+<img data-src="/home/mavinogradova/skreens/lbA6/53.png"
+style="width:100.0%" alt="Настройка gw-03" />
+<figcaption aria-hidden="true">Настройка gw-03</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:054">
+<img data-src="/home/mavinogradova/skreens/lbA6/54.png"
+style="width:100.0%" alt="Настройка gw-04" />
+<figcaption aria-hidden="true">Настройка gw-04</figcaption>
+</figure>
+</div>
+</div>
+<h2
+id="самостоятельное-задание-настройка-rip-на-gw-01-и-gw-02">Самостоятельное
+задание: настройка RIP на gw-01 и gw-02</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:055">
+<img data-src="/home/mavinogradova/skreens/lbA6/55.png"
+style="width:100.0%" alt="Настройка RIP на gw-01" />
+<figcaption aria-hidden="true">Настройка RIP на gw-01</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:056">
+<img data-src="/home/mavinogradova/skreens/lbA6/56.png"
+style="width:100.0%" alt="Настройка RIP на gw-02" />
+<figcaption aria-hidden="true">Настройка RIP на gw-02</figcaption>
+</figure>
+</div>
+</div>
+<h2
+id="самостоятельное-задание-настройка-rip-на-gw-03-и-gw-04">Самостоятельное
+задание: настройка RIP на gw-03 и gw-04</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:057">
+<img data-src="/home/mavinogradova/skreens/lbA6/57.png"
+style="width:100.0%" alt="Настройка RIP на gw-03" />
+<figcaption aria-hidden="true">Настройка RIP на gw-03</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:058">
+<img data-src="/home/mavinogradova/skreens/lbA6/58.png"
+style="width:100.0%" alt="Настройка RIP на gw-04" />
+<figcaption aria-hidden="true">Настройка RIP на gw-04</figcaption>
+</figure>
+</div>
+</div>
+<h2
+id="самостоятельное-задание-проверка-связи-и-маршрутов">Самостоятельное
+задание: проверка связи и маршрутов</h2>
+<div class="columns" data-align="center">
+<div class="column" style="width:50%;">
+<figure id="fig:059">
+<img data-src="/home/mavinogradova/skreens/lbA6/59.png"
+style="width:100.0%" alt="Проверка связи с PC1 до PC2" />
+<figcaption aria-hidden="true">Проверка связи с PC1 до PC2</figcaption>
+</figure>
+</div><div class="column" style="width:50%;">
+<figure id="fig:060">
+<img data-src="/home/mavinogradova/skreens/lbA6/60.png"
+style="width:100.0%" alt="Проверка таблиц маршрутизации на gw-01" />
+<figcaption aria-hidden="true">Проверка таблиц маршрутизации на
+gw-01</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="выводы" class="slide level1">
+<h1>Выводы</h1>
+<p>В ходе лабораторной работы были изучены принципы маршрутизации по
+протоколу RIP в IPv4- и IPv6-сетях и принципы настройки сетевого
+оборудования. Была настроена адресация IPv4 и IPv6 на оконечных
+устройствах и маршрутизаторах. Настроены протоколы динамической
+маршрутизации RIPv2 и RIPng. Проверены пути прохождения пакетов,
+проанализирована перестройка маршрутов при отказе каналов связи. Изучен
+механизм «отравления маршрута» и multicast-рассылка обновлений. Все
+поставленные задачи выполнены в полном объеме.</p>
+</section>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/reveal.js@^4//dist/reveal.js"></script>
+
+  <!-- reveal.js plugins -->
+  <script src="https://unpkg.com/reveal.js@^4//plugin/notes/notes.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/search/search.js"></script>
+  <script src="https://unpkg.com/reveal.js@^4//plugin/zoom/zoom.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: true,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'bottom-right',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: false,
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: false,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: true,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'default',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'slide',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'fade',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // reveal.js plugins
+        plugins: [
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    </body>
+</html>
